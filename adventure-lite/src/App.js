@@ -7,6 +7,18 @@ import './App.css';
 const {useState} = require("react");
 const  useInterval = require("./useInterval");
 
+const axios = require('axios');
+
+axios.get('http://localhost:3001/landscape')
+    .then(function (response) {
+      // handle success
+      console.log(response);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+
 const FIELD_SIZE = 16;
 const FIELD_ROW = [...new Array(FIELD_SIZE).keys()];
 
@@ -53,6 +65,9 @@ function newPersonPosition(segments, direction) {
 }
 
 function App() {
+
+
+
   const [personSegments,setPersonSegments] = useState([
     {x:8,y:8}
   ]);
