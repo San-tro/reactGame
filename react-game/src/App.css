@@ -1,0 +1,37 @@
+#main {
+  align-items: center;
+  margin: auto;
+  align-items: center;
+}
+#root {
+  margin: auto;
+  align-items: center;
+}
+#gor {
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  height: 800px;
+  width: 800px;
+}
+#vert {
+  flex-direction: column;
+  height: 800px;
+  width: 800px;
+}
+.sq {
+  display: inline;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+}
+.sqrow {
+  align-items: center;
+  height: 50px;
+  width: 800px;
+}
+body {
+  margin: 0px;
+}
+
+
