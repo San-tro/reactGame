@@ -4,6 +4,10 @@ import green from './green.png';
 import white from './white.png';
 import grey from './grey.png';
 import './App.css';
+
+const dbConnection = require("./models/dbConnection");
+const init_models = require('./models/init-models');
+
 const {useState} = require("react");
 const  useInterval = require("./useInterval");
 
@@ -62,8 +66,6 @@ function App() {
 
   const movePerson = ({keyCode}) =>
       keyCode >= 37 && keyCode <= 40 && setPersonSegments(segments => newPersonPosition(segments, DIRECTION[keyCode]));
-
-
 
   return (
 <div role="button" tabIndex="0" onKeyDown={e => movePerson(e)} >
