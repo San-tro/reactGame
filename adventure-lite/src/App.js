@@ -5,8 +5,6 @@ import white from './white.png';
 import grey from './grey.png';
 import './App.css';
 
-//const dbConnection = require("./models/dbConnection");
-//const init_models = require('./models/init-models');
 
 const {useState} = require("react");
 const  useInterval = require("./useInterval");
@@ -35,8 +33,28 @@ axios.get('http://localhost:3001/landscape')// пример получения
 const FIELD_SIZE = 17;
 const FIELD_ROW = [...new Array(FIELD_SIZE).keys()];
 
-const textureMap1x = [1,2,3,4,5,6,7,8,9];
-const textureMap1y = [1,1,1,1,2,2,2,3,4];
+var maps;
+
+function getMap(){
+  axios.get('http://localhost:3001/landscape')// пример получения
+      .then(function (response) {
+        // handle success
+        maps = response;
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+}
+
+getMap();
+
+/*const textureMap1x = [0,1,2,3,4,5,6,0,1,2,3,4,5,0,1,2,3,4,0,1,2,3,0,1,2,0,1,0,10,11,12,13,14,15,16,11,12,13,14,15,16,12,13,14,15,16,13,14,15,16,14,15,16,15,16,16,
+  0 ,1 ,2 ,3 ,4 ,5 ,6 ,0 ,1 ,2 ,3 ,4 ,5 ,0 ,1 ,2 ,3 ,4 ,0 ,1 ,2 ,3 ,0 ,1 ,2 ,0 ,1 ,0 ,10,11,12,13,14,15,16,11,12,13,14,15,16,12,13,14,15,16,13,14,15,16,14,15,16,15,16,16];
+const textureMap1y = [0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,4,4,4,5,5,6,0 ,0 ,0 ,0 ,0 ,0 ,0 , 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 6,
+  16,16,16,16,16,16,16,15,15,15,15,15,15,14,14,14,14,14,13,13,13,13,12,12,12,11,11,10,16,16,16,16,16,16,16,15,15,15,15,15,15,14,14,14,14,14,13,13,13,13,12,12,12,11,11,10];*/
+
+
 
 
 let randItem = {
@@ -109,7 +127,7 @@ function App() {
   ]);
 
   const movePerson = ({keyCode}) =>
-      keyCode >= 37 && keyCode <= 40 && setPersonSegments(segments => newPersonPosition(segments, DIRECTION[keyCode], textureMap1x,textureMap1y));
+      keyCode >= 37 && keyCode <= 40 && setPersonSegments(segments => newPersonPosition(segments, DIRECTION[keyCode], maps[0].x,maps[0].y));
 
   return (
 <div role="button" tabIndex="0" onKeyDown={e => movePerson(e)} >
@@ -119,7 +137,7 @@ function App() {
         {FIELD_ROW.map(y =>(
             <div class="sqrow" key={y}>
               {FIELD_ROW.map(x => (
-                  <img class="sq" key={x} src={getItem(x,y,personSegments, textureMap1x ,textureMap1y) || grey}/>
+                  <img class="sq" key={x} src={getItem(x,y,personSegments, maps[0].x ,maps[0].y) || grey}/>
               ))}
             </div>
         ))}

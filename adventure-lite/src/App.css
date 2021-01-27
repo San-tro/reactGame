@@ -11,13 +11,14 @@
   flex-direction: column;
   align-items: center;
   margin: auto;
-  height: 800px;
-  width: 800px;
+  height: 850px;
+  width: 850px;
 }
 #vert {
   flex-direction: column;
-  height: 800px;
-  width: 800px;
+  height: 850px;
+  width: 850px;
+  border: solid 1px;
 }
 .sq {
   display: inline;
@@ -28,7 +29,7 @@
 .sqrow {
   align-items: center;
   height: 50px;
-  width: 800px;
+  width: 850px;
 }
 body {
   margin: 0px;
