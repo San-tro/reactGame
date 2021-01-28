@@ -27,13 +27,30 @@ const  textureMap3y = [0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 1,2,
 const  textureMap4x = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,18,0,18,0,18,0,18,0,18,0,18,0,18,0,18,0,18,0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0, 1, 2, 3, 4, 5, 6, 7, 9,10,11,12,13,14,15,16,17,18,1,2,3,4,5,6,7,8,9,10,11,15,16,1,11,12,13,16,4,7,9,11,13,15,16,2,4,5,7,9,10,11,13,2,4,6,7,15,16,17,2,6,8,9,10,11,12,14,15,17,2,3,5,6,9,12,14,3,6,8,9,12,14,16,17,1,3,6,9,11,12,14, 1, 3, 4, 6, 8, 9,11,14,17, 1, 2, 3, 6,11,17, 1, 5, 6, 7, 8, 9,11,13,14,17, 1, 2, 5, 9,15,16,17, 1, 2, 3, 5, 7, 9,10,11,13,14, 1, 5, 7, 9,12,13,16, 1, 3, 5, 7, 9,11,12,15,16, 1, 2, 3, 7,14,15];
 const  textureMap4y = [0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 1,2, 2,3, 3,4, 4,5, 5,6, 6,7, 7,8, 8,9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1,2, 2, 2, 2, 2,3,3,3, 3, 3, 3, 3,4,4,4,4,4, 4, 4, 4,5,5,5,5, 5, 5, 5,6,6,6,6, 6, 6, 6, 6, 6, 6,7,7,7,7,7, 7, 7,8,8,8,8, 8, 8, 8, 8,9,9,9,9, 9, 9, 9,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,16,17,17,17,17,17,17];
 
-const  allMapX = [textureMap1x,textureMap2x,textureMap3x,textureMap4x];
-const  allMapY = [textureMap1y,textureMap2y,textureMap3y,textureMap4y];
+const lolFishX = [[-1],[true]];
+const lolFishXY = [-1];
 
-let randItem = {//рандомное расположение предмета
-  x: Math.floor(Math.random() * FIELD_SIZE),
-  y: Math.floor(Math.random() * FIELD_SIZE)
-};
+const firstFishX = [[9],[true]];
+const firstFishXY = [9];
+
+const secondFishX = [[9],[true]];
+const secondFishXY = [8];
+
+const thirdFishX = [[11],[true]];
+const thirdFishY = [7];
+
+let fishCount = 0;
+
+const allFishX = [lolFishX,firstFishX,secondFishX,thirdFishX];
+const allFishY = [lolFishXY,firstFishXY,secondFishXY,thirdFishY];
+
+let  allMapX = [textureMap1x,textureMap2x,textureMap3x,textureMap4x];
+let  allMapY = [textureMap1y,textureMap2y,textureMap3y,textureMap4y];
+
+allMapX[0].push(18);
+allMapY[0].push(10);
+//allMapX[0].pop();
+//allMapY[0].pop();
 
 const  DIRECTION = { // идентификация кнопок управления
   39: {x: 1, y: 0},
@@ -42,10 +59,8 @@ const  DIRECTION = { // идентификация кнопок управлен
   40: {x: 0, y: 1},
 };
 
-function getItem(x,y,personSegments, x1, y1) {//  отрисовка уровня в первый раз
-
-
-  if(randItem.x === x && randItem.y === y){// отрисовка предмета
+function getItem(x,y,personSegments, x1, y1,fishX,fishY) {//  отрисовка уровня в первый раз
+  if(fishX[0] == x && fishY == y && fishX[1]){// отрисовка предмета
     return green
   }
 
@@ -59,6 +74,13 @@ function getItem(x,y,personSegments, x1, y1) {//  отрисовка уровн�
     if (segment.x === x && segment.y === y){
       return red
     }
+    else if(segment.x == fishX[0] && segment.y == fishY[0] && fishX[1]){
+      allFishX[level][1] = false;
+      fishCount++;
+    }
+  }
+  if(fishCount == 3){
+    console.log("Win");
   }
 }
 
@@ -92,7 +114,10 @@ function newPersonPosition(segments, direction,xMap,yMap) { // перемеще�
       {level = 1;}
     } else if (level == 2)
         {if (x1 == 19 && y1 == 8)
-          {level = 0;}}
+          {
+            level = 0;
+          }
+        }
       else if (level == 1)
         {if (x1 == 10 && y1 == -1)
           level = 0;}
@@ -135,7 +160,7 @@ function App() {
         {FIELD_ROW.map(y =>(
             <div class="sqrow" key={y}>
               {FIELD_ROW.map(x => (
-                  <img class="sq" key={x} src={getItem(x,y,personSegments, allMapX[level] ,allMapY[level]) || grey}/>
+                  <img class="sq" key={x} src={getItem(x,y,personSegments, allMapX[level] ,allMapY[level], allFishX[level],allFishY[level]) || grey}/>
               ))}
             </div>
         ))}
