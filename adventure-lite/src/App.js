@@ -1,53 +1,19 @@
 "use strict";
-import red from './red.png';
-import green from './green.png';
-import white from './white.png';
-import grey from './grey.png';
+import red from './images/red.png';
+import green from './images/green.png';
+import white from './images/white.png';
+import grey from './images/grey.png';
 import './App.css';
 
 
-const {useState} = require("react");
-const  useInterval = require("./useInterval");
+const {useState} = require("react");// нужно для объявления переменных кторые будут сохранятся между рендерами ХУКИ
+const  useInterval = require("./useInterval");// не используется
 const axios = require('axios');
 
-/*function testbd(){// переделать под игрульку
-
-axios.get('http://localhost:3001/landscape')// пример получения
-    .then(function (response) {
-      // handle success
-      console.log(response);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    axios.post(`http://localhost:3001/leaderbord/add`,{// пример добавления
-        Name: '',
-        Time: '',
-        Score: '',
-        }
-    );
-}*/
-
-const FIELD_SIZE = 19;
-const FIELD_ROW = [...new Array(FIELD_SIZE).keys()];
 
 
-
-
-
-async function getMap(){
-  try {
-    const response = await axios.get('http://localhost:3001/landscape');
-    return  response
-  } catch (error) {
-    console.log(error);
-  }
-
-}
-
-var maps = getMap();
-//getMap();
+const FIELD_SIZE = 19;//карта
+const FIELD_ROW = [...new Array(FIELD_SIZE).keys()];//карта
 
 const textureMap1x = [0,1,2,3,4,5,6,7,8,0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,0,1,2,3,4,5,0,1,2,3,4,0,1,2,3,0,1,2,0,1,0, 10,11,12,13,14,15,16,17,18,11,12,13,14,15,16,17,18,12,13,14,15,16,17,18,13,14,15,16,17,18,14,15,16,17,18,15,16,17,18,16,17,18,17,18,18, 0,1,2,3,4,5,6,7,8,0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,0,1,2,3,4,5,0,1,2,3,4,0,1,2,3,0,1,2,0,1,0, 10,11,12,13,14,15,16,17,18,11,12,13,14,15,16,17,18,12,13,14,15,16,17,18,13,14,15,16,17,18,14,15,16,17,18,15,16,17,18,16,17,18,17,18,18];
 const textureMap1y = [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,5,5,5,5,6,6,6,7,7,8,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,5,5,5,5,6,6,6,7,7,8, 18,18,18,18,18,18,18,18,18,17,17,17,17,17,17,17,17,16,16,16,16,16,16,16,15,15,15,15,15,15,14,14,14,14,14,13,13,13,13,12,12,12,11,11,10, 18,18,18,18,18,18,18,18,18,17,17,17,17,17,17,17,17,16,16,16,16,16,16,16,15,15,15,15,15,15,14,14,14,14,14,13,13,13,13,12,12,12,11,11,10];
@@ -61,37 +27,37 @@ const  textureMap3y = [0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 1,2,
 const  textureMap4x = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,18,0,18,0,18,0,18,0,18,0,18,0,18,0,18,0,18,0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0,18, 0, 1, 2, 3, 4, 5, 6, 7, 8,10,11,12,13,14,15,16,17,18,1,2,3,4,5,6,7,8,9,10,11,15,16,1,11,12,13,16,4,7,9,11,13,15,16,2,4,5,7,9,10,11,13,2,4,6,7,15,16,17,2,6,8,9,10,11,12,14,15,17,2,3,5,6,9,12,14,3,6,8,9,12,14,16,17,1,3,6,9,11,12,14, 1, 3, 4, 6, 8, 9,11,14,17, 1, 2, 3, 6,11,17, 1, 5, 6, 7, 8, 9,11,13,14,17, 1, 2, 5, 9,15,16,17, 1, 2, 3, 5, 7, 9,10,11,13,14, 1, 5, 7, 9,12,13,16, 1, 3, 5, 7, 9,11,12,15,16, 1, 2, 3, 7,14,15];
 const  textureMap4y = [0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 1,2, 2,3, 3,4, 4,5, 5,6, 6,7, 7,8, 8,9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1,2, 2, 2, 2, 2,3,3,3, 3, 3, 3, 3,4,4,4,4,4, 4, 4, 4,5,5,5,5, 5, 5, 5,6,6,6,6, 6, 6, 6, 6, 6, 6,7,7,7,7,7, 7, 7,8,8,8,8, 8, 8, 8, 8,9,9,9,9, 9, 9, 9,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,16,17,17,17,17,17,17];
 
-let randItem = {
+let randItem = {//рандомное расположение предмета
   x: Math.floor(Math.random() * FIELD_SIZE),
   y: Math.floor(Math.random() * FIELD_SIZE)
-}
+};
 
-const  DIRECTION = {
+const  DIRECTION = { // идентификация кнопок управления
   39: {x: 1, y: 0},
   37: {x: -1, y: 0},
   38: {x: 0, y: -1},
   40: {x: 0, y: 1},
-}
+};
 
-function getItem(x,y,personSegments, x1, y1) {
-  if(randItem.x === x && randItem.y === y){
+function getItem(x,y,personSegments, x1, y1) {//  отрисовка уровня в первый раз
+  if(randItem.x === x && randItem.y === y){// отрисовка предмета
     return green
   }
 
-  for(let i = 0; i< x1.length; i++){
+  for(let i = 0; i< x1.length; i++){//отрисовка текстур (стен)
     if(x1[i] === x && y1[i] === y){
       return white
     }
   }
 
-  for (const  segment of personSegments){
+  for (const  segment of personSegments){// отрисовка игрока
     if (segment.x === x && segment.y === y){
       return red
     }
   }
 }
 
-function limitByField(j) {
+function limitByField(j) {// ограничение по полю
   if(j >= FIELD_SIZE){
     return 0;
   }
@@ -101,16 +67,16 @@ function limitByField(j) {
  return j;
 }
 
-function newPersonPosition(segments, direction,xMap,yMap) {
+function newPersonPosition(segments, direction,xMap,yMap) { // перемещение игрока
   let go = true;
   let x1 = segments[0].x + direction.x;
   let y1 = segments[0].y + direction.y;
   for(let i = 0; i< xMap.length; i++) {
-    if (x1 == xMap[i] && y1 == yMap[i]) {
+    if (x1 == xMap[i] && y1 == yMap[i]) {// проверка на столкновение с текстурой
       go = false
     }
   }
-  if(go){
+  if(go){ // задание нового положения
     return segments.map(segment => ({
       x: limitByField(segment.x + direction.x),
       y: limitByField(segment.y + direction.y)
@@ -128,7 +94,7 @@ function newPersonPosition(segments, direction,xMap,yMap) {
 function App() {
 
 
-  const [personSegments,setPersonSegments] = useState([
+  const [personSegments,setPersonSegments] = useState([// значения переменных сохраняются между рендерингами
     {x:9,y:9}
   ]);
 
@@ -137,7 +103,7 @@ function App() {
 
   return (
 <div role="button" tabIndex="0" onKeyDown={e => movePerson(e)} >
-  <p >Adventure-lite</p>
+  <p>Adventure-lite</p>
     <div id="gor">
       <div id="vert">
         {FIELD_ROW.map(y =>(
@@ -154,3 +120,38 @@ function App() {
 }
 
 export default App;
+/* (НЕРАБОТАЕТ) РАБОТА С БД
+function testbd(){// переделать под игрульку
+
+axios.get('http://localhost:3001/landscape')// пример получения
+    .then(function (response) {
+      // handle success
+      console.log(response);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    axios.post(`http://localhost:3001/leaderbord/add`,{// пример добавления
+        Name: '',
+        Time: '',
+        Score: '',
+        }
+    );
+}
+
+//////////////////////////////////////////////////////////////////
+
+async function getMap(){
+  try {
+    const response = await axios.get('http://localhost:3001/landscape');
+    return  response
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+var maps = getMap();
+
+* */
